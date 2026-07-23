@@ -5,3 +5,5 @@ venv/
 .venv/
 .idea/
 .vscode/
+node_modules/
+dist/
