@@ -10,7 +10,8 @@ import Footer from './components/Footer';
 import { fetchArticlesFromSupabase, supabase } from './lib/supabase';
 import { Bell } from 'lucide-react';
 
-const CATEGORIES = ['All', 'World & Politics', 'Technology', 'Business', 'UK News', 'Health'];
+const CATEGORIES = ['All', 'Kenya & East Africa', 'World & Politics', 'Technology', 'Business & Economy', 'Health & Energy', 'UK News'];
+const SOURCES = ['All Outlets', 'BBC News', 'Weekly Citizen'];
 
 export default function App() {
   const [articles, setArticles] = useState([]);
@@ -18,6 +19,7 @@ export default function App() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedSource, setSelectedSource] = useState('All Outlets');
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [bookmarks, setBookmarks] = useState(() => {
     try {
@@ -31,7 +33,6 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState(null);
   const [lastSyncTime, setLastSyncTime] = useState(null);
 
-  // Load articles from Supabase
   const loadArticles = async (showSpinner = false) => {
     if (showSpinner) setIsRefreshing(true);
     try {
@@ -51,14 +52,13 @@ export default function App() {
   useEffect(() => {
     loadArticles();
 
-    // Subscribe to real-time updates from Supabase postgres changes
     const channel = supabase
       .channel('realtime-articles')
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'articles' },
         (payload) => {
-          showToast(`New story: "${payload.new?.title || 'BBC Update'}"`);
+          showToast(`New article: "${payload.new?.title || 'Feed Update'}"`);
           loadArticles();
         }
       )
@@ -66,7 +66,7 @@ export default function App() {
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'Artcles' },
         (payload) => {
-          showToast(`New story: "${payload.new?.title || 'BBC Update'}"`);
+          showToast(`New article: "${payload.new?.title || 'Feed Update'}"`);
           loadArticles();
         }
       )
@@ -77,7 +77,6 @@ export default function App() {
     };
   }, []);
 
-  // Persist bookmarks
   useEffect(() => {
     try {
       localStorage.setItem('bbc_saved_articles', JSON.stringify(bookmarks));
@@ -102,29 +101,35 @@ export default function App() {
     });
   };
 
-  // Filtered articles calculation
   const filteredArticles = useMemo(() => {
     let sourceList = showOnlyBookmarks ? bookmarks : articles;
 
     return sourceList.filter(article => {
-      // Category check
+      // Source Outlet filter
+      if (selectedSource !== 'All Outlets' && !showOnlyBookmarks) {
+        if (article.source !== selectedSource) {
+          return false;
+        }
+      }
+
+      // Topic Category filter
       if (selectedCategory !== 'All' && !showOnlyBookmarks) {
         if (article.category !== selectedCategory) {
           return false;
         }
       }
 
-      // Search Query check
+      // Search Query filter
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
-        const titleMatches = (article.title || '').toLowerCase().includes(query);
+        const titleMatches = (article.cleanTitle || article.title || '').toLowerCase().includes(query);
         const summaryMatches = (article.summary || '').toLowerCase().includes(query);
         return titleMatches || summaryMatches;
       }
 
       return true;
     });
-  }, [articles, bookmarks, searchQuery, selectedCategory, showOnlyBookmarks]);
+  }, [articles, bookmarks, searchQuery, selectedCategory, selectedSource, showOnlyBookmarks]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0b0c10] text-slate-100 selection:bg-red-600 selection:text-white">
@@ -160,6 +165,9 @@ export default function App() {
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           categories={CATEGORIES}
+          selectedSource={selectedSource}
+          setSelectedSource={setSelectedSource}
+          sources={SOURCES}
           onRefresh={() => loadArticles(true)}
           isRefreshing={isRefreshing}
           bookmarkCount={bookmarks.length}
@@ -191,6 +199,7 @@ export default function App() {
             onReset={() => {
               setSearchQuery('');
               setSelectedCategory('All');
+              setSelectedSource('All Outlets');
               setShowOnlyBookmarks(false);
             }}
           />

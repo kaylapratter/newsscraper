@@ -1,0 +1,52 @@
+[
+  {
+    "id": 101,
+    "title": "Kenya Economy Poised for Growth as Key Trade Agreements Take Effect",
+    "link": "https://weeklycitizen.co.ke/kenya-economy-growth-trade-agreements/",
+    "summary": "Recent trade policies and regional economic integration have opened new avenues for Kenyan exports across East Africa.",
+    "published": "2026-07-26T10:00:00",
+    "content": "<p>Kenya's economic outlook remains positive as new bilateral trade agreements boost agricultural and technology exports. Analysts highlight strong growth in fintech and tea export sectors.</p>",
+    "image_url": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=800&auto=format&fit=crop",
+    "source": "Weekly Citizen"
+  },
+  {
+    "id": 102,
+    "title": "Nairobi Infrastructure Expansion Projects Reach Key Milestones",
+    "link": "https://weeklycitizen.co.ke/nairobi-infrastructure-expansion-milestones/",
+    "summary": "Major urban road developments and commuter transit upgrades aim to ease traffic congestion across the capital city.",
+    "published": "2026-07-25T14:30:00",
+    "content": "<p>The Ministry of Transport reported significant progress on suburban bypass links and electric bus transit lanes designed to modernize Nairobi's public transportation network.</p>",
+    "image_url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=800&auto=format&fit=crop",
+    "source": "Weekly Citizen"
+  },
+  {
+    "id": 103,
+    "title": "Renewable Energy Investments Surge in East Africa Region",
+    "link": "https://weeklycitizen.co.ke/renewable-energy-investments-surge-east-africa/",
+    "summary": "Solar and geothermal expansion projects position Kenya as a clean energy leader in continental power generation.",
+    "published": "2026-07-24T09:15:00",
+    "content": "<p>New green energy initiatives funded by public-private partnerships have added 200MW of geothermal capacity to the national grid, enhancing energy reliability.</p>",
+    "image_url": "https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=800&auto=format&fit=crop",
+    "source": "Weekly Citizen"
+  },
+  {
+    "id": 104,
+    "title": "Tech Innovation Hubs Drive Digital Skills Training for Youth",
+    "link": "https://weeklycitizen.co.ke/tech-innovation-hubs-digital-skills/",
+    "summary": "Specialized coding academies and incubation hubs across major towns empower thousands of young entrepreneurs.",
+    "published": "2026-07-23T16:45:00",
+    "content": "<p>Grassroots tech hubs in Kisumu, Eldoret, and Mombasa are equipping youth with software engineering and AI skills to meet global remote workforce demand.</p>",
+    "image_url": "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop",
+    "source": "Weekly Citizen"
+  },
+  {
+    "id": 105,
+    "title": "Agricultural Modernization Boosts Smallholder Crop Yields",
+    "link": "https://weeklycitizen.co.ke/agricultural-modernization-smallholder-crop-yields/",
+    "summary": "Smart irrigation systems and subsidized organic fertilizer programs increase regional food security.",
+    "published": "2026-07-22T11:20:00",
+    "content": "<p>Farmers across the Rift Valley report record maize and horticulture harvests following the adoption of climate-smart farming techniques and localized weather alerts.</p>",
+    "image_url": "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=800&auto=format&fit=crop",
+    "source": "Weekly Citizen"
+  }
+]

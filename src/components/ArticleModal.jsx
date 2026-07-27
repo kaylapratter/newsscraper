@@ -1,10 +1,12 @@
 import React from 'react';
-import { X, ExternalLink, Bookmark, Clock, Share2, Globe } from 'lucide-react';
+import { X, ExternalLink, Bookmark, Clock, Share2, Globe, Newspaper } from 'lucide-react';
 
 export default function ArticleModal({ article, onClose, isBookmarked, onToggleBookmark }) {
   if (!article) return null;
 
-  const { title, link, summary, category, formattedDate, published } = article;
+  const { title, cleanTitle, link, summary, content, category, formattedDate, published, source, image_url } = article;
+  const displayTitle = cleanTitle || title;
+  const isWeeklyCitizen = source === 'Weekly Citizen';
 
   const handleCopyLink = () => {
     if (navigator.clipboard) {
@@ -14,47 +16,71 @@ export default function ArticleModal({ article, onClose, isBookmarked, onToggleB
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
       <div
-        className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 overflow-hidden text-slate-100"
+        className="relative w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden text-slate-100 my-8 max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Accent Line */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-amber-500 to-red-600" />
+        <div className={`h-1.5 w-full ${isWeeklyCitizen ? 'bg-gradient-to-r from-emerald-500 to-teal-400' : 'bg-gradient-to-r from-red-600 to-amber-500'}`} />
 
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition-all"
+          className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-slate-900/80 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-700 transition-all"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* Category & Timestamp */}
-        <div className="flex items-center space-x-3 mb-4">
-          <span className="px-3 py-1 rounded-lg text-xs font-semibold uppercase bg-red-950/80 border border-red-800/60 text-red-400">
-            {category || 'World News'}
-          </span>
-          <div className="flex items-center text-xs text-slate-400 space-x-1">
-            <Clock className="w-3.5 h-3.5 text-slate-500" />
-            <span>{formattedDate || published}</span>
+        <div className="overflow-y-auto p-6 sm:p-8 space-y-6">
+
+          {/* Featured Image if present */}
+          {image_url && (
+            <div className="relative w-full h-64 rounded-xl overflow-hidden border border-slate-800 bg-slate-950">
+              <img src={image_url} alt={displayTitle} className="w-full h-full object-cover" />
+            </div>
+          )}
+
+          {/* Category & Source Metadata */}
+          <div className="flex flex-wrap items-center gap-3">
+            <span className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider ${
+              isWeeklyCitizen 
+                ? 'bg-emerald-950 border border-emerald-800 text-emerald-400' 
+                : 'bg-red-950 border border-red-800 text-red-400'
+            }`}>
+              {source || 'BBC News'}
+            </span>
+            <span className="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300">
+              {category || 'General'}
+            </span>
+            <div className="flex items-center text-xs text-slate-400 space-x-1.5 ml-auto">
+              <Clock className="w-3.5 h-3.5 text-slate-500" />
+              <span>{formattedDate || published}</span>
+            </div>
           </div>
+
+          {/* Article Title */}
+          <h2 className="text-2xl sm:text-3xl font-bold font-heading text-white leading-tight">
+            {displayTitle}
+          </h2>
+
+          {/* Full Article Content or Summary */}
+          {content ? (
+            <div 
+              className="prose prose-invert max-w-none text-slate-300 text-sm sm:text-base leading-relaxed border-t border-slate-800/80 pt-4"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          ) : (
+            <div className="bg-slate-950/60 border border-slate-800/60 rounded-xl p-6 text-slate-300 text-sm sm:text-base leading-relaxed">
+              {summary || 'No extended content snippet available.'}
+            </div>
+          )}
+
         </div>
 
-        {/* Article Headline */}
-        <h2 className="text-xl sm:text-2xl font-bold font-heading text-white mb-4 leading-snug">
-          {title}
-        </h2>
-
-        {/* Article Body Snippet */}
-        <div className="bg-slate-950/60 border border-slate-800/60 rounded-xl p-5 mb-6 text-slate-300 text-sm sm:text-base leading-relaxed">
-          {summary || 'No detailed summary snippet available for this news item.'}
-        </div>
-
-        {/* Modal Actions Footer */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
+        {/* Modal Footer Actions */}
+        <div className="flex flex-wrap items-center justify-between gap-3 p-6 border-t border-slate-800 bg-slate-950/90 mt-auto">
           <div className="flex items-center space-x-2">
-            {/* Copy Link Button */}
             <button
               onClick={handleCopyLink}
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all"
@@ -62,7 +88,6 @@ export default function ArticleModal({ article, onClose, isBookmarked, onToggleB
               <Share2 className="w-4 h-4 text-slate-400" /> Copy Link
             </button>
 
-            {/* Bookmark Button */}
             <button
               onClick={() => onToggleBookmark(article)}
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium transition-all ${
@@ -72,19 +97,22 @@ export default function ArticleModal({ article, onClose, isBookmarked, onToggleB
               }`}
             >
               <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-amber-400 text-amber-400' : ''}`} />
-              <span>{isBookmarked ? 'Bookmarked' : 'Save'}</span>
+              <span>{isBookmarked ? 'Saved' : 'Save'}</span>
             </button>
           </div>
 
-          {/* Go to BBC Button */}
           <a
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-600/30 transition-all"
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-white shadow-lg transition-all ${
+              isWeeklyCitizen 
+                ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/30' 
+                : 'bg-red-600 hover:bg-red-500 shadow-red-600/30'
+            }`}
           >
             <Globe className="w-4 h-4" />
-            <span>Read Full Story on BBC</span>
+            <span>Read Original Article on {source}</span>
             <ExternalLink className="w-4 h-4" />
           </a>
         </div>
