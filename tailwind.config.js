@@ -8,22 +8,31 @@ export default {
   theme: {
     extend: {
       colors: {
-        bbc: {
-          red: '#bb1919',
-          accent: '#ff2d2d',
-          dark: '#0e0f14',
-          card: '#161820',
-          border: '#262936',
-          muted: '#8b92a5'
+        citizen: {
+          green: '#006837',
+          emerald: '#059669',
+          gold: '#d97706',
+          amber: '#f59e0b',
+          dark: '#0b0e14',
+          card: '#131822',
+          border: '#202938',
+          muted: '#8b96a8'
         }
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         heading: ['Outfit', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'spin-slow': 'spin 3s linear infinite',
+        'marquee': 'marquee 25s linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        }
       }
     },
   },

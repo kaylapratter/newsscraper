@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
+import FeaturedHero from './components/FeaturedHero';
 import NewsCard from './components/NewsCard';
 import ArticleModal from './components/ArticleModal';
 import SkeletonCard from './components/SkeletonCard';
@@ -11,7 +12,7 @@ import { fetchArticlesFromSupabase, supabase } from './lib/supabase';
 import { Bell } from 'lucide-react';
 
 const CATEGORIES = ['All', 'Kenya & East Africa', 'World & Politics', 'Technology', 'Business & Economy', 'Health & Energy', 'UK News'];
-const SOURCES = ['All Outlets', 'BBC News', 'Weekly Citizen'];
+const SOURCES = ['All Outlets', 'Weekly Citizen', 'BBC News'];
 
 export default function App() {
   const [articles, setArticles] = useState([]);
@@ -105,21 +106,18 @@ export default function App() {
     let sourceList = showOnlyBookmarks ? bookmarks : articles;
 
     return sourceList.filter(article => {
-      // Source Outlet filter
       if (selectedSource !== 'All Outlets' && !showOnlyBookmarks) {
         if (article.source !== selectedSource) {
           return false;
         }
       }
 
-      // Topic Category filter
       if (selectedCategory !== 'All' && !showOnlyBookmarks) {
         if (article.category !== selectedCategory) {
           return false;
         }
       }
 
-      // Search Query filter
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const titleMatches = (article.cleanTitle || article.title || '').toLowerCase().includes(query);
@@ -131,18 +129,21 @@ export default function App() {
     });
   }, [articles, bookmarks, searchQuery, selectedCategory, selectedSource, showOnlyBookmarks]);
 
+  const heroArticle = filteredArticles[0] || null;
+  const gridArticles = filteredArticles.slice(1);
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#0b0c10] text-slate-100 selection:bg-red-600 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#0b0e14] text-slate-100 selection:bg-emerald-600 selection:text-white">
       
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center space-x-3 bg-red-950 border border-red-600/80 text-white px-5 py-3.5 rounded-2xl shadow-2xl animate-bounce">
-          <Bell className="w-5 h-5 text-red-400" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center space-x-3 bg-emerald-950 border border-emerald-600/80 text-white px-5 py-3.5 rounded-2xl shadow-2xl animate-bounce">
+          <Bell className="w-5 h-5 text-emerald-400" />
           <span className="text-xs font-semibold">{toastMessage}</span>
         </div>
       )}
 
-      {/* Header */}
+      {/* Editorial Header & Masthead */}
       <Header
         articleCount={articles.length}
         lastUpdated={lastSyncTime}
@@ -158,7 +159,7 @@ export default function App() {
           activeCategory={showOnlyBookmarks ? 'Saved' : selectedCategory}
         />
 
-        {/* Search & Filter Bar */}
+        {/* Search & Outlet Filter Bar */}
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -175,6 +176,16 @@ export default function App() {
           setShowOnlyBookmarks={setShowOnlyBookmarks}
         />
 
+        {/* Featured Hero Story for Top Result */}
+        {!loading && heroArticle && !searchQuery && selectedCategory === 'All' && selectedSource === 'All Outlets' && !showOnlyBookmarks && (
+          <FeaturedHero
+            article={heroArticle}
+            onOpenModal={(art) => setSelectedArticle(art)}
+            isBookmarked={bookmarks.some(b => b.link === heroArticle.link)}
+            onToggleBookmark={handleToggleBookmark}
+          />
+        )}
+
         {/* Article Grid / Loading / Empty State */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -184,7 +195,7 @@ export default function App() {
           </div>
         ) : filteredArticles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredArticles.map(article => (
+            {(!searchQuery && selectedCategory === 'All' && selectedSource === 'All Outlets' && !showOnlyBookmarks ? gridArticles : filteredArticles).map(article => (
               <NewsCard
                 key={article.id || article.link}
                 article={article}
