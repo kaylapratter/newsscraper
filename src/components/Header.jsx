@@ -21,7 +21,7 @@ export default function Header({ articleCount = 0 }) {
         </div>
         <div className="whitespace-nowrap overflow-hidden relative flex-1">
           <div className="inline-block animate-marquee text-slate-200 font-medium">
-            Kenya Trade & Regional Economy Surge in 2026 • Nairobi Infrastructure Expansion Projects Milestone • Geothermal & Solar Investments Lead East Africa Clean Power • Digital Tech Academies Equip Youth • Mombasa Port Logistics Automation Cuts Transit Times
+            Kenya Trade & Regional Economy Surge • Nairobi Infrastructure Expansion Projects Milestone • Geothermal & Solar Investments Lead East Africa Clean Power • Digital Tech Academies Equip Youth • Mombasa Port Logistics Automation Cuts Transit Times
           </div>
         </div>
         <div className="shrink-0 pl-4 hidden sm:flex items-center space-x-2 text-[11px] font-semibold text-emerald-300">
@@ -51,7 +51,7 @@ export default function Header({ articleCount = 0 }) {
             </h1>
           </div>
           <p className="text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto font-sans tracking-wide">
-            Independent Investigative Reporting, National Politics & Comprehensive 2026 Archive
+            Independent Investigative Reporting, National Politics & Live Coverage
           </p>
         </div>
 
@@ -59,7 +59,7 @@ export default function Header({ articleCount = 0 }) {
         <div className="editorial-border py-2 flex items-center justify-between text-xs text-slate-300">
           <div className="flex items-center space-x-2">
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Digital Publication: <strong className="text-white">Active 2026 Archive</strong></span>
+            <span>Digital Publication: <strong className="text-white">Live Edition</strong></span>
           </div>
           <div className="flex items-center space-x-2">
             <span>Curated Stories: <strong className="text-emerald-400">{articleCount} Articles</strong></span>

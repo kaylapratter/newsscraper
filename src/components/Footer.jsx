@@ -19,7 +19,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed max-w-md">
-              Delivering independent investigative reporting, national news analysis, and global archive coverage. Updating every 3 hours with breaking news editions.
+              Delivering independent investigative reporting, national news analysis, and regional coverage. Updating every 3 hours with breaking news editions.
             </p>
           </div>
 

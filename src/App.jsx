@@ -6,7 +6,6 @@ import NewsCard from './components/NewsCard';
 import ArticleModal from './components/ArticleModal';
 import SkeletonCard from './components/SkeletonCard';
 import EmptyState from './components/EmptyState';
-import StatsBar from './components/StatsBar';
 import Footer from './components/Footer';
 import { fetchArticlesFromSupabase, supabase } from './lib/supabase';
 import { Bell } from 'lucide-react';
@@ -152,13 +151,6 @@ export default function App() {
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         
-        {/* Stats Analytics Overview */}
-        <StatsBar
-          totalArticles={articles.length}
-          lastSyncTime={lastSyncTime}
-          activeCategory={showOnlyBookmarks ? 'Saved' : selectedCategory}
-        />
-
         {/* Search & Outlet Filter Bar */}
         <SearchBar
           searchQuery={searchQuery}
@@ -207,7 +199,7 @@ export default function App() {
           </div>
         ) : (
           <EmptyState
-            onReset={() => {
+            onResetFilters={() => {
               setSearchQuery('');
               setSelectedCategory('All');
               setSelectedSource('All Outlets');
@@ -215,7 +207,6 @@ export default function App() {
             }}
           />
         )}
-
       </main>
 
       {/* Article Detail Modal */}
@@ -228,7 +219,7 @@ export default function App() {
         />
       )}
 
-      {/* Footer */}
+      {/* Clean Editorial Footer */}
       <Footer />
 
     </div>
