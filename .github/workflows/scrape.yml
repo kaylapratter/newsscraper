@@ -1,8 +1,8 @@
-name: BBC News Scraper
+name: Weekly News Pulse Scraper
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Automatically runs every 6 hours
+    - cron: '0 */3 * * *'  # Automatically runs every 3 hours
   workflow_dispatch:        # Allows manual triggering from GitHub UI
 
 jobs:
@@ -23,9 +23,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run News Scraper
+      - name: Run News Scrapers & Sync
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://xidizxbsrwrkbgokxdnu.supabase.co' }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY || 'sb_publishable_6KPjtxyVAcRWrXR3CA8fvg_1JIpQMjI' }}
         run: |
           python scraper.py
+          python upload_to_supabase.py
